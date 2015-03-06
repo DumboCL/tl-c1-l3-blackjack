@@ -1,7 +1,14 @@
-<h4>Set Player Name</h4>
-
-<form action='/set_name' method='post'>
-  Name: <input type='text' name='player_name'/>
+<% if session[:player_name]%>
+  <h2><%= session[:player_name]%>, welcome to the Blackjack game!</h2>
   <br/>
-  <input type='submit' class='btn'/>
-</form>
+  <a href="/game" class='btn btn-info'/>Game Start</a>
+<% else %>
+  <h2>Welcome to the Blackjack game!</h2>
+  <br/>
+  <h4>Please input your name</h4>
+  <form action='/set_name' method='post'>
+    <input type='text' name='player_name'/>
+    <br/>
+    <input type='submit' class='btn'/>
+  </form>
+<% end%>

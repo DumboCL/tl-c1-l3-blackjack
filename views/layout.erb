@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>My First App</title>
+    <title>Blackjack</title>
     <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/application.css">
   </head>
@@ -12,6 +12,16 @@
         <div class="container">
             <ul class="nav">
               <li><a href="/">Home</a></li>
+              <li><% if session[:player_name]%>
+                    <a href="/player_profile">Profile</a>
+                  <% end%>
+              </li>
+            </ul>
+            <ul class="nav pull-right">
+              <li><% if session[:player_name]%>
+                    <a href="/game">New Game</a> 
+                  <% end%>
+              </li>
             </ul>
         </div>
       </div>
@@ -20,6 +30,9 @@
   <div class="container">
     <%if @error %>
       <div class="alert alert-error"><%=@error%></div>
+    <% end %>
+    <%if @success %>
+      <div class="alert alert-success"><%=@success%></div>
     <% end %>
       <%= yield %>
   </div>
