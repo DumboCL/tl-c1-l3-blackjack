@@ -149,7 +149,7 @@ get '/game' do
   cards = []
     CARDS_SUIT.each do |suit_value|
       CARDS_RANK.each do |rank_value|
-        cards << ({suit: suit_value, rank: rank_value})
+        cards << {suit: suit_value, rank: rank_value}
       end
     end
   session[:cards] = cards
