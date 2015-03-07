@@ -5,16 +5,19 @@ set :sessions, true
 
 BLACKJACK_AMOUNT = 21
 DEALER_MIN_AMOUNT = 17
+CARDS_SUIT = ['♠︎','♥︎','♣︎','♦︎']
+CARDS_RANK = ['A','2','3','4','5','6','7','8','9','10','J','Q','K']
+
 
 helpers do
   def calculate_total(cards)
     result = 0
-    count_A = 0
+    ace_count = 0
 
     cards.each do |card|
       if card[:rank].to_i == 0
         if card[:rank] == 'A'
-          count_A = count_A + 1
+          ace_count = ace_count + 1
         else
           result += 10
         end
@@ -23,22 +26,22 @@ helpers do
       end
     end
 
-    if count_A > 0
+    if ace_count > 0
       begin
         case 
         when result <= 10
-          result = result + 11
+          result += 11
         when result >10
-          result = result + 1  
+          result += 1  
         end
-        count_A -= 1
-      end while count_A > 0
+        ace_count -= 1
+      end while ace_count > 0
     end
     result
   end
   
   def card_image(card)
-    if card.class == String
+    if card.is_a?(String)
       "<img src='/images/cards/cover.jpg' class='card_image'>"
     else
       suit = case card[:suit]
@@ -144,9 +147,9 @@ end
 
 get '/game' do
   cards = []
-    ['♠︎','♥︎','♣︎','♦︎'].each do |suit_value|
-      ['A','2','3','4','5','6','7','8','9','10','J','Q','K'].each do |rank_value|
-        cards.push({suit: suit_value, rank: rank_value})
+    CARDS_SUIT.each do |suit_value|
+      CARDS_RANK.each do |rank_value|
+        cards << ({suit: suit_value, rank: rank_value})
       end
     end
   session[:cards] = cards
