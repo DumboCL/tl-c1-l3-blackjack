@@ -1,6 +1,6 @@
 <h2>Blackjack Game</h2>
 
-<div class="well">
+<div class="well" id="dealer_area">
   <p>Dealer's hand</p>
   <p>
     <% if @show_dealer_cards %>
@@ -22,14 +22,15 @@
   </p>
 </div>
 
-<div class="well">
+<div class="well" id="player_area">
   <p>Player's hand</p>
   <% session[:player_cards].each do |card| %>
     <%= card_image(card)%>
   <%end%>
 </div>
 
-<p>You have <%= calculate_total(session[:player_cards]) %></p>
+<p>You have <%= calculate_total(session[:player_cards]) %> points.</p>
+<p>You have $<%= session[:player_pot] %> in your pocket.</p>
 
 <% if @show_hit_or_stay_buttons %>
   <form id="hit_form" action='/hit' method='post'>

@@ -4,6 +4,8 @@
     <title>Blackjack</title>
     <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/application.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="/application.js"></script>
   </head>
   <body style="padding-top: 50px;">
 
@@ -11,7 +13,7 @@
       <div class="navbar-inner">
         <div class="container">
             <ul class="nav">
-              <li><a href="/">Home</a></li>
+              <li><a href="/">Start Over</a></li>
               <li><% if session[:player_name]%>
                     <a href="/player_profile">Profile</a>
                   <% end%>
@@ -19,7 +21,7 @@
             </ul>
             <ul class="nav pull-right">
               <li><% if session[:player_name]%>
-                    <a href="/game">New Game</a> 
+                    <a href="/game">New Round</a> 
                   <% end%>
               </li>
             </ul>
