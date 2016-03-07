@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'sinatra'
+require 'pry'
 
 #############
 # modified for Chrome issue
@@ -100,18 +101,19 @@ post '/hit' do
   session[:player_cards] << session[:cards].sample
   @show_dealer_cards = false
   if calculate_total(session[:player_cards]) > BLACKJACK_AMOUNT
-    @error = "You busted!"
+    @loser = "You busted!"
     @show_hit_or_stay_buttons = false
     @show_dealer_cards = true
     session[:player_pot] -= session[:player_bet]
+    session[:player_bet] = nil 
   elsif calculate_total(session[:player_cards]) == BLACKJACK_AMOUNT
-    @error = "Aha, blackjack, you win!!"
+    @winner = "Aha, blackjack, you win!!"
     @show_hit_or_stay_buttons = false
     @show_dealer_cards = true
     session[:player_pot] += session[:player_bet]
-  end 
-  session[:player_bet] = nil   
-  erb :game
+    session[:player_bet] = nil 
+  end
+  erb :game, layout: false
 end
 
 get '/dealer' do
@@ -119,11 +121,11 @@ get '/dealer' do
   @show_dealer_cards = true
   dealer_total = calculate_total(session[:dealer_cards])
   if dealer_total == BLACKJACK_AMOUNT
-    @error = "Sorry, dealer hit blackjack."
+    @loser = "Sorry, dealer hit blackjack."
     session[:player_pot] -= session[:player_bet]
     session[:player_bet] = nil
   elsif dealer_total > BLACKJACK_AMOUNT
-    @success = "Congratulations, dealer busted. You win."
+    @winner = "Congratulations, dealer busted. You win."
     session[:player_pot] += session[:player_bet]
     session[:player_bet] = nil
   elsif dealer_total >= DEALER_MIN_AMOUNT
@@ -133,7 +135,7 @@ get '/dealer' do
     #dealer hits
     @show_dealer_hit_button = true
   end
-  erb :game     
+  erb :game, layout: false  
 end
 
 post '/dealer/hit' do
@@ -145,18 +147,18 @@ get '/compare' do
   player_total = calculate_total(session[:player_cards])
   dealer_total = calculate_total(session[:dealer_cards])
   if player_total < dealer_total
-    @error = 'Sorry, you lost.'
+    @loser = 'Sorry, you lost.'
     session[:player_pot] -= session[:player_bet]
   elsif player_total > dealer_total
-    @success = 'Congrats, you won!'
+    @winner = 'Congrats, you won!'
     session[:player_pot] += session[:player_bet]
   else
-    @success = "It's a tie!"
+    @winner = "It's a tie!"
   end
   @show_dealer_cards = true
   @show_hit_or_stay_buttons = false
   session[:player_bet] = nil
-  erb :game
+  erb :game, layout: false 
 end
 
 get '/' do
@@ -201,7 +203,7 @@ get '/game' do
     session[:dealer_cards] << session[:cards].sample
     session[:dealer_cards] << session[:cards].sample
     if calculate_total(session[:player_cards]) == BLACKJACK_AMOUNT
-      @error = "Aha, blackjack, you win!!"
+      @winner = "Aha, blackjack, you win!!"
       @show_hit_or_stay_buttons = false
       @show_dealer_cards = true
       @show_dealer_hit_button = false

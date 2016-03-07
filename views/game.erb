@@ -1,42 +1,51 @@
-<h2>Blackjack Game</h2>
+<div id="game">
+  <%if @loser %>
+    <div class="alert alert-error"><%=@loser%></div>
+  <% end %>
+  <%if @winner %>
+    <div class="alert alert-success"><%=@winner%></div>
+  <% end %>
 
-<div class="well" id="dealer_area">
-  <p>Dealer's hand</p>
-  <p>
-    <% if @show_dealer_cards %>
-      <% session[:dealer_cards].each do |card| %>
-        <%= card_image(card)%>
-      <%end%>
-    <% else %>
-      <%= card_image('cover')%>
-      <%= card_image(session[:dealer_cards][1])%>
-    <% end %>
-  </p>
-  <p>
-    <% if @show_dealer_hit_button %>
-      Dealer has <%= calculate_total(session[:dealer_cards])%>
-      <form id="dealer_hit_form" action='/dealer/hit' method='post'>
-        <input type='submit' class='btn btn-primary' method='post' value='Continue'/>
-      </form>
-    <% end %>
-  </p>
+  <h2>Blackjack Game</h2>
+
+  <div class="well" id="dealer_area">
+    <p>Dealer's hand</p>
+    <p>
+      <% if @show_dealer_cards %>
+        <% session[:dealer_cards].each do |card| %>
+          <%= card_image(card)%>
+        <%end%>
+      <% else %>
+        <%= card_image('cover')%>
+        <%= card_image(session[:dealer_cards][1])%>
+      <% end %>
+    </p>
+    <p>
+      <% if @show_dealer_hit_button %>
+        Dealer has <%= calculate_total(session[:dealer_cards])%>
+        <form id="dealer_hit_form" action='/dealer/hit' method='post'>
+          <input type='submit' class='btn btn-primary' method='post' value='Continue'/>
+        </form>
+      <% end %>
+    </p>
+  </div>
+
+  <div class="well" id="player_area">
+    <p>Player's hand</p>
+    <% session[:player_cards].each do |card| %>
+      <%= card_image(card)%>
+    <%end%>
+  </div>
+
+  <p>You have <%= calculate_total(session[:player_cards]) %> points.</p>
+  <p>You have $<%= session[:player_pot] %> in your pocket.</p>
+
+  <% if @show_hit_or_stay_buttons %>
+    <form id="hit_form" action='/hit' method='post'>
+      <input type='submit' class='btn btn-info' method='post' value='Hit'/>
+    </form>
+    <form id="stay_form" action='/stay' method='post'>
+      <input type='submit' class='btn btn-warning' method='post' value='Stay'/>
+    </form>
+  <% end %>
 </div>
-
-<div class="well" id="player_area">
-  <p>Player's hand</p>
-  <% session[:player_cards].each do |card| %>
-    <%= card_image(card)%>
-  <%end%>
-</div>
-
-<p>You have <%= calculate_total(session[:player_cards]) %> points.</p>
-<p>You have $<%= session[:player_pot] %> in your pocket.</p>
-
-<% if @show_hit_or_stay_buttons %>
-  <form id="hit_form" action='/hit' method='post'>
-    <input type='submit' class='btn btn-info' method='post' value='Hit'/>
-  </form>
-  <form id="stay_form" action='/stay' method='post'>
-    <input type='submit' class='btn btn-warning' method='post' value='Stay'/>
-  </form>
-<% end %>
